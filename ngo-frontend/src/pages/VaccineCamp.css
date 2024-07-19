@@ -1,0 +1,52 @@
+.vaccine-container {
+    /* background-color: #90e0ef; */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.addvaccine-form, .editvaccine-form{
+    background-color: #e794a4;
+}
+
+.addvaccine-page, .editvaccine-page{
+    background-color: #FADADD;
+    background-size: 'cover';
+    min-height: 100vh;
+}
+.vaccine-table {
+    /* background-color: #d5bfbf; */
+    width: 80vw;
+    margin: auto;
+}
+
+.vaccine-table-head th {
+    background-color: #c73d54;
+    color: white;
+}
+
+.vaccine-button {
+    border-color: #007bff;
+    color: white;
+}
+
+.vaccine-button2 {
+    border-color: #c20030;
+    color:#c20030
+}
+
+.vaccine-button.btn-primary {
+    background-color: #c20030;
+    border-color: #162c2f;
+}
+
+.vaccine-button.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.vaccine-heading {
+    font-family: 'Mukta', sans-serif;
+    color: #33000D;
+    font-weight: 700;
+    font-size: 40px;
+}

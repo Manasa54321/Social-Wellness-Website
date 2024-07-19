@@ -1,0 +1,52 @@
+.donation-container {
+    /* background-color: #90e0ef; */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.adddonation-form, .editdonation-form{
+    background-color: #e794a4;
+}
+
+.adddonation-page, .editdonation-page{
+    background-color: #FADADD;
+    background-size: 'cover';
+    min-height: 100vh;
+}
+.donation-table {
+    /* background-color: #d5bfbf; */
+    width: 80vw;
+    margin: auto;
+}
+
+.donation-table-head th {
+    background-color: #d60000;
+    color: white;
+}
+
+.donation-button {
+    border-color: #007bff;
+    color: white;
+}
+
+.donation-button2 {
+    border-color: #c20030;
+    color:#c20030
+}
+
+.donation-button.btn-primary {
+    background-color: #c20030;
+    border-color: #162c2f;
+}
+
+.donation-button.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.donation-heading {
+    font-family: 'Mukta', sans-serif;
+    color: #33000D;
+    font-weight: 700;
+    font-size: 40px;
+}

@@ -1,0 +1,100 @@
+/* Bloodcenter.css */
+
+/* .bloodcenter-page {
+  background-image: url('../BloodCenter/bloodcenter.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0 auto;
+} */
+
+.center-container {
+  padding: 10px;
+  padding-top: 5px;
+  position: relative;
+}
+
+.center-content.py-4 {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.center-heading {
+  padding-top: 40px;
+  color: black;
+  text-decoration: double;
+  font-weight: 600;
+  font-size: 40px;
+  text-align: center;
+  
+}
+
+.center-table.table {
+  width: 80%;
+  margin-bottom: 1rem;
+  color: #212529;
+  border-collapse: collapse;
+  background-color: aqua;
+  margin: 0 auto;
+}
+
+.center-table.table th,
+.center-table.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+  background-color:#fff;
+}
+
+.center-table.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+  background-color:lightcoral;
+}
+
+.center-table.table tbody + tbody {
+  border-top: 2px solid #dee2e6;
+}
+
+.center-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.center-button.btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+}
+
+.center-button.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.center-button.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid #007bff;
+  color: #007bff;
+}
+
+.center-button.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.center-button.btn-outline-light {
+  background-color: blue;
+  border: 1px solid black;
+  color: #fff;
+  display: inline-block;
+  margin: auto;
+}
+
+.center-button.btn-outline-light:hover {
+  background-color: #fff;
+  color: #333;
+}

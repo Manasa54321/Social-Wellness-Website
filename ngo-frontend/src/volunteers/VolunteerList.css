@@ -1,0 +1,13 @@
+#volList{
+    background-color: peachpuff; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+  }
+  
+  .heading strong {
+    font-size: 16px; 
+  }
+  

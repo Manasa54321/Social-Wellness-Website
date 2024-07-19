@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Home.css */
+.hero {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-image: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url(./images/volunteer2.avif);
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: inherit;
+  filter: blur(2px); /* Adjust the blur radius as needed */
+  z-index: 1;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+}
+  
+  .call-to-action {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .call-to-action:hover {
+    background-color: #0069d9;
+  }
+  
+  .featured-section {
+    background-color: #f7f7f7;
+    padding: 20px;
+  }
+  
+  .featured-section h2 {
+    margin-top: 0;
+  }
+  
+  .featured-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .featured-section li {
+    margin-bottom: 20px;
+  }
+  
+  .featured-section img {
+    width: 100%;
+    height: 100vh; /* Set a fixed height for the carousel items */
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .social-wellness {
+    padding: 20px;
+  }
+  
+  .social-wellness h2 {
+    margin-top: 0;
+  }
+  
+  .social-wellness p {
+    margin-bottom: 20px;
+  }
+  
+  .social-wellness ul {
+    padding-left: 20px;
+  }
+  
+  .social-wellness img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .carousel-image {
+    width: 100%;
+    height: 100%; /* Ensure the image covers the full height of the carousel item */
+    object-fit: cover; /* Cover the area without distorting the image */
+  }
+  .carousel-image p{
+    text-align: center; /* Cover the area without distorting the image */
+  
+  }
+  
+  
+  .info-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .info-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .info-content h3 {
+    margin-top: 0;
+  }
+  
+  .info-content p {
+    margin-bottom: 0;
+  }
+
+
+  .spacer {
+    padding-top: 40px; /* Adjust the value as needed */
+    background-color: white;
+  }
+  
+#footer{
+  height: 10vh;
+  width: 100vw;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
