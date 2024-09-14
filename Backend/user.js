@@ -39,42 +39,126 @@ app.get('/users', (req, res) => {
 
 // Route to add a new user
 app.post('/add', (req, res) => {
-    const { username, firstName, lastName, email, phNo, address, role, password } = req.body;
-  
-    // Input validation
-    
-  
-    // Use the actual column names from the table
-    const query = "INSERT INTO user (username, firstName, lastName, email, phNo, address, role, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-  
-    connection.query(query, [username, firstName, lastName, email, phNo, address, role, password], (err, results) => {
+  const { username, firstName, lastName, email, phNo, address, role, password } = req.body;
+
+  // Input validation
+  const query = "INSERT INTO user (username, firstName, lastName, email, phNo, address, role, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+  connection.query(query, [username, firstName, lastName, email, phNo, address, role, password], (err, results) => {
+    if (err) {
+      console.error('Error adding user:', err);
+      return res.status(500).json({ error: 'Error adding user' });
+    }
+    res.status(201).json({ message: 'User added successfully' });
+  });
+});
+
+// Route to get all volunteers
+app.get('/volunteers', (req, res) => {
+  const query = `
+    SELECT v.id, v.user_id, u.username, u.firstName, u.lastName, u.email
+    FROM volunteers v
+    JOIN user u ON v.user_id = u.user_id
+  `;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching volunteers:', err);
+      return res.status(500).json({ error: 'Error fetching volunteers' });
+    }
+    res.json(results);
+  });
+});
+
+// Route to add a new volunteer
+app.post('/volunteer', (req, res) => {
+  const { skills, prefTasks, prefDays, user } = req.body;
+
+  // Start a transaction
+  connection.beginTransaction(err => {
+    if (err) {
+      console.error('Error starting transaction:', err);
+      return res.status(500).json({ error: 'Error starting transaction' });
+    }
+
+    // Insert into volunteers table
+    const volunteerQuery = 'INSERT INTO volunteers (user_id) VALUES (?)';
+    connection.query(volunteerQuery, [user.user_id], (err, result) => {
       if (err) {
-        console.error('Error adding user:', err);
-        return res.status(500).json({ error: 'Error adding user' });
+        return connection.rollback(() => {
+          console.error('Error inserting into volunteers table:', err);
+          res.status(500).json({ error: 'Error adding volunteer' });
+        });
       }
-      res.status(201).json({ message: 'User added successfully' });
+
+      const volunteerId = result.insertId;
+
+      // Insert into volunteer_skills table
+      const skillQueries = skills.map(skill => {
+        return new Promise((resolve, reject) => {
+          connection.query(
+            'INSERT INTO volunteer_skills (volunteer_id, skill) VALUES (?, ?)',
+            [volunteerId, skill],
+            (err, result) => {
+              if (err) return reject(err);
+              resolve(result);
+            }
+          );
+        });
+      });
+
+      // Insert into volunteer_pref_tasks table
+      const taskQueries = prefTasks.map(prefTask => {
+        return new Promise((resolve, reject) => {
+          connection.query(
+            'INSERT INTO volunteer_pref_tasks (volunteer_id, pref_task) VALUES (?, ?)',
+            [volunteerId, prefTask],
+            (err, result) => {
+              if (err) return reject(err);
+              resolve(result);
+            }
+          );
+        });
+      });
+
+      // Insert into volunteer_pref_days table
+      const dayQueries = prefDays.map(prefDay => {
+        return new Promise((resolve, reject) => {
+          connection.query(
+            'INSERT INTO volunteer_pref_days (volunteer_id, pref_day) VALUES (?, ?)',
+            [volunteerId, prefDay],
+            (err, result) => {
+              if (err) return reject(err);
+              resolve(result);
+            }
+          );
+        });
+      });
+
+      // Wait for all queries to finish
+      Promise.all([...skillQueries, ...taskQueries, ...dayQueries])
+        .then(() => {
+          connection.commit(err => {
+            if (err) {
+              return connection.rollback(() => {
+                console.error('Error committing transaction:', err);
+                res.status(500).json({ error: 'Error adding volunteer' });
+              });
+            }
+            res.status(201).json({ message: 'Volunteer added successfully' });
+          });
+        })
+        .catch(err => {
+          connection.rollback(() => {
+            console.error('Error in transaction:', err);
+            res.status(500).json({ error: 'Error adding volunteer' });
+          });
+        });
     });
   });
+});
 
-
-  app.get('/volunteers', (req, res) => {
-    // Query to fetch all volunteers with their details
-    const query = `
-        SELECT v.id, v.user_id, u.username, u.firstName, u.lastName, u.email
-        FROM volunteers v
-        JOIN user u ON v.user_id = u.user_id
-    `;
-    
-    connection.query(query, (err, results) => {
-      if (err) {
-        console.error('Error fetching volunteers:', err);
-        return res.status(500).json({ error: 'Error fetching volunteers' });
-      }
-      res.json(results);
-    });
-  });
-  
 // Start the server
 app.listen(port, () => {
-  console.log("Server running at http://localhost:${port}");
+  console.log(`Server running at http://localhost:${port}`);
 });

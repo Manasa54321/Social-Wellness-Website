@@ -52,21 +52,23 @@ export default function Login() {
       if (!existingUser) {
           alert("Username does not exist. Please register.");
           return;
-      } else {
-          if (existingUser.password !== user.password) {
-              alert("Incorrect password. Please try again.");
-              return;
-          }
-  
-          const existingVol = vols.find((v) => v.user.id === existingUser.id);
-          if (!existingVol) {
-              setAuthState({ userId: existingUser.id, vId: 0 });
-          } else {
-              setAuthState({ userId: existingUser.id, vId: existingVol.id });
-          }
-  
-          console.log("login submit ", existingUser.id, existingVol ? existingVol.id : null);
-          navigate("/home");
+      }
+      else {
+        if (existingUser.password !== user.password) {
+            alert("Incorrect password. Please try again.");
+            return;
+        }
+        
+        const existingVol = vols.find((v) => v.user_id === existingUser.user_id);
+        
+        if (!existingVol) {
+          setAuthState({ userId: existingUser.user_id, vId: 0 });
+        } else {
+          setAuthState({ userId: existingUser.user_id, vId: existingVol.id });
+        }
+
+        console.log("login submit ", existingUser.user_id, existingVol ? existingVol.id : null);
+        navigate("/home");
       }
   }
     

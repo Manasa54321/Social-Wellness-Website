@@ -6,7 +6,7 @@ import './volunteers.css';
 
 export const AddVolunteer = () => {
   let navigate = useNavigate();
-  const { authState } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
   const { id } = useParams();
 
   const [volunteers, setVolunteers] = useState([]);
@@ -65,7 +65,13 @@ export const AddVolunteer = () => {
     e.preventDefault();
     console.log("authState.userId: ", authState.userId)
     console.log("Volunteer : ", volunteer)
-    await axios.post("http://localhost:8080/volunteer", volunteer);
+    const response = await axios.post("http://localhost:8080/volunteer", volunteer);
+    const newVolunteerId = response.data.vId;
+
+    setAuthState((prevState) => ({
+      ...prevState,
+      vId: newVolunteerId,
+    }));
     navigate("/");
   };
 

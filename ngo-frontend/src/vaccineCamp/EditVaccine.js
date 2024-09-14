@@ -42,6 +42,7 @@ export default function EditVaccine() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("user : ", user);
     await axios.put(`http://localhost:8080/vaccineCamp/${id}`, user);
     navigate("/");
   };
