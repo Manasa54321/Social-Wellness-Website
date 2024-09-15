@@ -5,7 +5,6 @@ import './addcenter.css'
 
 export default function EditUser() {
   let navigate = useNavigate();
-
   const { id } = useParams();
 
   const [bloodCenter, setUser] = useState({
@@ -13,9 +12,10 @@ export default function EditUser() {
     location: "",
     timing: "00:00 AM",
     status: "",
+    blood_groups: [] // To hold selected blood groups
   });
 
-  const { u_name, location, timing ,status } = bloodCenter;
+  const { u_name, location, timing, status, blood_groups } = bloodCenter;
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +31,9 @@ export default function EditUser() {
         ...bloodCenter,
         timing: `${newTime.hour}:${newTime.minute} ${newTime.period}`,
       });
+    } else if (name === 'blood_groups') {
+      const updatedGroups = Array.from(e.target.selectedOptions, option => option.value);
+      setUser({ ...bloodCenter, blood_groups: updatedGroups });
     } else {
       setUser({ ...bloodCenter, [name]: value });
     }
@@ -48,7 +51,7 @@ export default function EditUser() {
           "Content-Type": "application/json"
         }
       });
-      navigate("/");
+      navigate("/bloodcenter");
     } catch (error) {
       console.error("Error updating blood center:", error);
     }
@@ -63,7 +66,7 @@ export default function EditUser() {
     <div className="container pt-5 mt-5">
       <div className="row">
         <div className="add-center-form col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-          <h2 className="text-center m-4">Edit User</h2>
+          <h2 className="text-center m-4">Edit Blood Center</h2>
 
           <form onSubmit={(e) => onSubmit(e)}>
             <div className="mb-3">
@@ -146,6 +149,30 @@ export default function EditUser() {
                 onChange={onInputChange}
               />
             </div>
+
+            {/* Blood Groups Section */}
+            <div className="mb-3">
+              <label htmlFor="blood_groups" className="form-label">
+                Blood Groups Available
+              </label>
+              <select
+                multiple
+                className="form-select"
+                name="blood_groups"
+                value={blood_groups}
+                onChange={onInputChange}
+              >
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+              </select>
+            </div>
+
             <button type="submit" className="btn btn-outline-primary">
               Submit
             </button>

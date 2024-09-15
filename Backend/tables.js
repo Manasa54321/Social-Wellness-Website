@@ -2,7 +2,7 @@ var mysql = require('mysql2');
 
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'user',
+    user: 'chaitra',
     password: '1234',
     database: 'ngo'
 });
@@ -51,7 +51,7 @@ con.connect((err) => {
     });
 
     let createVolunteersTableQuery = `
-        CREATE TABLE volunteers (
+        CREATE TABLE IF NOT EXISTS volunteers (
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
             user_id INT(5),
             FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
@@ -146,5 +146,84 @@ con.connect((err) => {
     con.query(createVaccineCampTableQuery, (err, result) => {
         if (err) throw err;
         console.log("VaccineCamp table created");
+    });
+
+
+
+
+
+
+
+
+
+    // Create bloodCenter table
+    let createBloodCenterTableQuery = `
+    CREATE TABLE bloodCenter (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    u_name VARCHAR(255),
+    location VARCHAR(255),
+    timing VARCHAR(20),
+    status VARCHAR(50)
+)
+`;
+
+    // Create bloodGroups table
+    let createBloodGroupsTableQuery = `
+   CREATE TABLE bloodGroups (
+    id BIGINT PRIMARY KEY,
+    blood_group VARCHAR(10) NOT NULL
+);
+`;
+
+
+    let insertBloodGroups = `
+        INSERT INTO bloodGroups (id, blood_group) VALUES
+(1, 'A+'),
+(2, 'A-'),
+(3, 'B+'),
+(4, 'B-'),
+(5, 'AB+'),
+(6, 'AB-'),
+(7, 'O+'),
+(8, 'O-');
+    `
+
+    // Create a join table to establish many-to-many relationship
+    let createBloodCenterBloodGroupTableQuery = `
+    CREATE TABLE bloodCenterBloodGroup (
+    bloodCenter_id BIGINT,
+    bloodGroup_id BIGINT,
+    FOREIGN KEY (bloodCenter_id) REFERENCES bloodCenter(id),
+    FOREIGN KEY (bloodGroup_id) REFERENCES bloodGroups(id),
+    PRIMARY KEY (bloodCenter_id, bloodGroup_id)
+);
+    `;
+
+    // Execute the queries
+    con.query(createBloodCenterTableQuery, (err, result) => {
+        if (err) throw err;
+        console.log("bloodCenter table created");
+    });
+
+    con.query(createBloodGroupsTableQuery, (err, result) => {
+        if (err) throw err;
+        console.log("bloodGroups table created");
+    });
+
+    con.query(createBloodCenterBloodGroupTableQuery, (err, result) => {
+        if (err) throw err;
+        console.log("bloodCenterBloodGroup table created");
+    });
+
+    con.query(insertBloodGroups, (err, result) => {
+        if (err) throw err;
+        console.log("Blood Groups table created");
+    });
+
+
+
+    con.query(createVolunteersTableQuery, (err, result) => {
+        if (err) throw err;
+        console.log("Volunteers table created");
     });
 });

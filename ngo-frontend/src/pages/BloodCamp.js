@@ -24,7 +24,7 @@ export default function BloodCamp() {
       setUserRole("user");
     }
     else {
-      const res = await axios.get(`http://localhost:8080/user/role?userId=${userId}`);
+      const res = await axios.get(`http://localhost:8080/user/role?user_id=${userId}`);
       setUserRole(res.data);
     }
     console.log(userRole);

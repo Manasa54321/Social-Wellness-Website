@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const fetchUserRole = async (userId) => {
     try {
-      const res = await axios.get(`http://localhost:8080/user/role?userId=${userId}`);
+      const res = await axios.get(`http://localhost:8080/user/role?user_id=${userId}`);
       setUserRole(res.data);
       setIsLoading(false); // Set loading to false after successful fetch
       console.log(res.data);

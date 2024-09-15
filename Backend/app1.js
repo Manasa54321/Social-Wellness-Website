@@ -11,7 +11,7 @@ app.use(cors()); // for handling CORS
 // Create a connection to the database
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'user',
+  user: 'chaitra',
   password: '1234',
   database: 'ngo'
 });
@@ -26,6 +26,8 @@ connection.connect(err => {
 
   
 });
+
+
 
 // Route to get all users
 app.get('/users', (req, res) => {
@@ -50,6 +52,9 @@ app.get('/user/role/:id', (req, res) => {
     res.json(results);
   });
 });
+
+
+
 
 app.get('/getevents', (req, res) => {
   connection.query('SELECT * FROM events', (err, results) => {
@@ -394,6 +399,255 @@ app.post('/volevents', (req, res) => {
       });
     });
   });
+
+
+
+
+
+
+
+
+
+  
+app.post('/bloodCenter', (req, res) => {
+  const { u_name, location, timing, status, blood_groups } = req.body;
+
+  // Ensure blood_groups is defined and is an array
+  const bloodGroups = Array.isArray(blood_groups) ? blood_groups : [];
+
+  const query = `INSERT INTO bloodCenter (u_name, location, timing, status) VALUES (?, ?, ?, ?)`;
+
+  connection.query(query, [u_name, location, timing, status], (err, result) => {
+    if (err) {
+      console.error('Error adding blood center:', err);
+      return res.status(500).json({ error: 'Error adding blood center' });
+    }
+
+    const bloodCenterId = result.insertId;
+
+    // Link the blood groups (use the fixed blood group IDs)
+    const bloodGroupMapping = {
+      'A+': 1,
+      'A-': 2,
+      'B+': 3,
+      'B-': 4,
+      'AB+': 5,
+      'AB-': 6,
+      'O+': 7,
+      'O-': 8
+    };
+
+    const bloodGroupIds = bloodGroups.map(group => bloodGroupMapping[group]).filter(id => id != null);
+
+    if (bloodGroupIds.length > 0) {
+      const insertBloodGroupPromises = bloodGroupIds.map(groupId => {
+        return new Promise((resolve, reject) => {
+          const insertQuery = `
+            INSERT INTO bloodCenterBloodGroup (bloodCenter_id, bloodGroup_id)
+            VALUES (?, ?)
+          `;
+          connection.query(insertQuery, [bloodCenterId, groupId], (err) => {
+            if (err) {
+              console.error('Error linking blood group:', err);
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      });
+
+      Promise.all(insertBloodGroupPromises)
+        .then(() => {
+          res.status(201).json({ message: 'Blood center added successfully' });
+        })
+        .catch(err => {
+          res.status(500).json({ error: 'Error linking blood groups to blood center' });
+        });
+    } else {
+      res.status(201).json({ message: 'Blood center added successfully, but no valid blood groups provided' });
+    }
+  });
+});
+
+
+
+// Update a blood center
+app.put('/bloodCenter/:id', (req, res) => {
+  const { id } = req.params;
+  const { u_name, location, timing, status, blood_groups } = req.body;
+
+  const updateQuery = `
+    UPDATE bloodCenter SET u_name = ?, location = ?, timing = ?, status = ? WHERE id = ?
+  `;
+
+  connection.query(updateQuery, [u_name, location, timing, status, id], (err) => {
+    if (err) {
+      console.error('Error updating blood center:', err);
+      return res.status(500).json({ error: 'Error updating blood center' });
+    }
+
+    // Delete previous blood group associations
+    const deleteBloodGroupsQuery = `DELETE FROM bloodCenterBloodGroup WHERE bloodCenter_id = ?`;
+
+    connection.query(deleteBloodGroupsQuery, [id], (err) => {
+      if (err) {
+        console.error('Error removing old blood groups:', err);
+        return res.status(500).json({ error: 'Error removing old blood groups' });
+      }
+
+      // Insert new blood group associations (use fixed blood group IDs)
+      const bloodGroups = Array.isArray(blood_groups) ? blood_groups : [];
+
+      const bloodGroupMapping = {
+        'A+': 1,
+        'A-': 2,
+        'B+': 3,
+        'B-': 4,
+        'AB+': 5,
+        'AB-': 6,
+        'O+': 7,
+        'O-': 8
+      };
+
+      const bloodGroupIds = bloodGroups.map(group => bloodGroupMapping[group]).filter(id => id != null);
+
+      if (bloodGroupIds.length > 0) {
+        const insertBloodGroupPromises = bloodGroupIds.map(groupId => {
+          return new Promise((resolve, reject) => {
+            const insertQuery = `
+              INSERT INTO bloodCenterBloodGroup (bloodCenter_id, bloodGroup_id)
+              VALUES (?, ?)
+            `;
+            connection.query(insertQuery, [id, groupId], (err) => {
+              if (err) {
+                console.error('Error updating blood group:', err);
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
+          });
+        });
+
+        Promise.all(insertBloodGroupPromises)
+          .then(() => {
+            res.json({ message: 'Blood center updated successfully' });
+          })
+          .catch(err => {
+            res.status(500).json({ error: 'Error updating blood groups' });
+          });
+      } else {
+        res.json({ message: 'Blood center updated successfully, but no valid blood groups provided' });
+      }
+    });
+  });
+});
+
+
+
+app.delete('/bloodCenter/:id', (req, res) => {
+  const bloodCenterId = req.params.id;
+
+  // Start a transaction
+  connection.beginTransaction((err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to start transaction' });
+    }
+
+    // Delete associated records from bloodCenterBloodGroup
+    const deleteBloodCenterBloodGroupQuery = 'DELETE FROM bloodCenterBloodGroup WHERE bloodCenter_id = ?';
+    connection.query(deleteBloodCenterBloodGroupQuery, [bloodCenterId], (err) => {
+      if (err) {
+        return connection.rollback(() => {
+          res.status(500).json({ error: 'Error deleting blood center blood group associations' });
+        });
+      }
+
+      // Delete the blood center record
+      const deleteBloodCenterQuery = 'DELETE FROM bloodCenter WHERE id = ?';
+      connection.query(deleteBloodCenterQuery, [bloodCenterId], (err, result) => {
+        if (err) {
+          return connection.rollback(() => {
+            res.status(500).json({ error: 'Error deleting blood center' });
+          });
+        }
+
+        if (result.affectedRows === 0) {
+          return connection.rollback(() => {
+            res.status(404).json({ error: 'Blood center not found' });
+          });
+        }
+
+        // Commit the transaction
+        connection.commit((err) => {
+          if (err) {
+            return connection.rollback(() => {
+              res.status(500).json({ error: 'Failed to commit transaction' });
+            });
+          }
+          res.json({ message: 'Blood center deleted successfully' });
+        });
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
+
+// Get all blood centers with blood groups
+app.get('/bloodCenter', (req, res) => {
+  const query = `
+    SELECT bc.id, bc.u_name, bc.location, bc.timing, bc.status, 
+           GROUP_CONCAT(bg.blood_group) AS blood_groups
+    FROM bloodCenter bc
+    LEFT JOIN bloodCenterBloodGroup bcbg ON bc.id = bcbg.bloodCenter_id
+    LEFT JOIN bloodGroups bg ON bcbg.bloodGroup_id = bg.id
+    GROUP BY bc.id
+  `;
+
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching blood centers:', err);
+      return res.status(500).json({ error: 'Error fetching blood centers' });
+    }
+    res.json(results);
+  });
+});
+
+
+app.get('/bloodCenter/:id', (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT bc.id, bc.u_name, bc.location, bc.timing, bc.status, 
+           GROUP_CONCAT(bg.blood_group) AS blood_groups
+    FROM bloodCenter bc
+    LEFT JOIN bloodCenterBloodGroup bcbg ON bc.id = bcbg.bloodCenter_id
+    LEFT JOIN bloodGroups bg ON bcbg.bloodGroup_id = bg.id
+    WHERE bc.id = ?
+    GROUP BY bc.id
+  `;
+
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching blood center by ID:', err);
+      return res.status(500).json({ error: 'Error fetching blood center by ID' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Blood center not found' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
   
   // Route to get all vaccine camps
   app.get('/vaccineCamp', (req, res) => {

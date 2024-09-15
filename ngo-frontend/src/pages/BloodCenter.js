@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import AuthContext from '../AuthContext';
@@ -23,9 +23,9 @@ export default function Bloodcenter() {
   };
 
   const fetchUserRole = async (userId) => {
-    const res = await axios.get(`http://localhost:8080/user/role?userId=${userId}`);
+    const res = await axios.get(`http://localhost:8080/user/role?user_id=${userId}`);
     setUserRole(res.data);
-    console.log(userRole)
+    console.log(userRole);
   };
 
   const deleteBloodCenter = async (id) => {
@@ -39,7 +39,7 @@ export default function Bloodcenter() {
         <div className="center-container">
           <div className="center-content py-4">
             <h1 className="center-heading">Blood Center</h1>
-            <br></br>
+            <br />
             <table className="center-table table border shadow">
               <thead>
                 <tr>
@@ -47,6 +47,7 @@ export default function Bloodcenter() {
                   <th scope="col">Hospital Name</th>
                   <th scope="col">Location</th>
                   <th scope="col">Timing</th>
+                  <th scope="col">Available Blood Groups</th>
                   <th scope="col">Status</th>
                   <th scope="col">Action</th>
                 </tr>
@@ -58,12 +59,10 @@ export default function Bloodcenter() {
                     <td>{center.u_name}</td>
                     <td>{center.location}</td>
                     <td>{center.timing}</td>
+                    <td>{center.blood_groups}</td> {/* Display available blood groups */}
                     <td>{center.status}</td>
                     <td>
-                      <Link className="center-button btn btn-primary mx-2" to={`/viewcenter/${center.id}`}>
-                        View
-                      </Link>
-                      {userRole === 'admin' && (<Link className="center-button btn btn-outline-primary mx-2" to={`/editcenter/${center.id}`}>
+                    {userRole === 'admin' && (<Link className="center-button btn btn-outline-primary mx-2" to={`/editcenter/${center.id}`}>
                         Edit
                       </Link>)}
                       {userRole === 'admin' && (<button className="center-button btn btn-danger mx-2" onClick={() => deleteBloodCenter(center.id)}>
@@ -74,12 +73,12 @@ export default function Bloodcenter() {
                 ))}
               </tbody>
             </table>
+            {userRole === 'admin' && (<div className="d-flex justify-content-center my-3">
+              <Link className="center-button btn btn-outline-light" to="/addcenter">
+                Add Blood Center
+              </Link>
+            </div>)}
           </div>
-          {userRole === 'admin' &&  (<div className="d-flex justify-content-center my-3">
-          <Link className="center-button btn btn-outline-light" to="/addcenter">
-            Add Blood Center
-          </Link>
-          </div>)}
         </div>
       </div>
     </div>

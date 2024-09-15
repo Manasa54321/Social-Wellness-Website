@@ -11,21 +11,13 @@ export default function AddCenter() {
     location: "",
     timing: "00:00 AM",
     status: "",
+    blood_groups: [], // Ensure the name matches the backend field
   });
 
-  const { u_name, location, timing, status } = bloodCenter;
+  const { u_name, location, timing, status, blood_groups } = bloodCenter;
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
-
-    let validValue = value;
-    if (name === 'u_name' || name === 'status') {
-      const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces are allowed
-      if (!regex.test(value)) {
-        alert("Only alphabetic characters and spaces are allowed for hospital name and status.");
-        return;
-      }
-    }
 
     if (name === 'hour' || name === 'minute' || name === 'period') {
       const [hour, minute, period] = timing.split(/[:\s]/);
@@ -38,8 +30,14 @@ export default function AddCenter() {
         ...bloodCenter,
         timing: `${newTime.hour}:${newTime.minute} ${newTime.period}`,
       });
+    } else if (name === 'blood_groups') {
+      const selectedGroups = Array.from(
+        e.target.selectedOptions,
+        (option) => option.value
+      );
+      setBloodCenter({ ...bloodCenter, blood_groups: selectedGroups });
     } else {
-      setBloodCenter({ ...bloodCenter, [name]: validValue });
+      setBloodCenter({ ...bloodCenter, [name]: value });
     }
   };
 
@@ -132,6 +130,27 @@ export default function AddCenter() {
                     <option value='PM'>PM</option>
                   </select>
                 </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="blood_groups" className="form-label">
+                  Available Blood Groups
+                </label>
+                <select
+                  multiple
+                  className="form-control"
+                  name="blood_groups"
+                  value={blood_groups}
+                  onChange={onInputChange}
+                >
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
               </div>
               <div className="mb-3">
                 <label htmlFor="status" className="form-label">
