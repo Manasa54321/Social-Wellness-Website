@@ -37,21 +37,21 @@ export default function AddUser() {
 
     let validValue = value;
     if (name === "firstName" || name === "lastName") {
-      const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces are allowed
+      const regex = /^[a-zA-Z\s]*$/; 
       if (!regex.test(value)) {
         return;
       }
     }
 
     if (name === "email") {
-      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/; // Email format with only lowercase
+      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/; 
       if (!emailRegex.test(value)) {
         return;
       }
     }
 
     if (name === "ph_no") {
-      const phoneRegex = /^\d{0,10}$/; // Only digits and up to 10 characters
+      const phoneRegex = /^\d{0,10}$/;
       if (!phoneRegex.test(value)) {
         return;
       }

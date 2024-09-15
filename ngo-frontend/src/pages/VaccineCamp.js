@@ -45,7 +45,6 @@ export default function VaccineCamp() {
     <div className="vaccine-container container-fluid p-0" style={{ backgroundImage: `url(${vaccine1})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
       <div className="overlay"></div>
       <div className="text-center">
-        {/* <img src="logo.png" alt="Logo" className="logo" /> Add your logo image */}
         <h2 className="vaccine-heading my-1 mt-5 pt-5">Vaccination Centers</h2>
       </div>
       <div className="vaccine-table py-4">
@@ -86,11 +85,11 @@ export default function VaccineCamp() {
         </table>
       </div>
       {userRole === 'admin' && (
-      <div className="d-flex justify-content-center my-3">
-        <Link className="vaccine-button btn btn-primary" to="/addvaccine">
-          Add Vaccination Camp
-        </Link>
-      </div>
+        <div className="d-flex justify-content-center my-3">
+          <Link className="vaccine-button btn btn-primary" to="/addvaccine">
+            Add Vaccination Camp
+          </Link>
+        </div>
       )}
     </div>
   );

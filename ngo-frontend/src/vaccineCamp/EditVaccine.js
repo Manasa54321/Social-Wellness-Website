@@ -51,13 +51,13 @@ export default function EditVaccine() {
     const result = await axios.get(`http://localhost:8080/vaccineCamp/${id}`);
     const userData = result.data;
     const formattedDate = new Date(userData.vdate).toISOString().slice(0, 10);
-  
+
     setUser({
       ...userData,
-      vdate: formattedDate, 
+      vdate: formattedDate,
     });
   };
-  
+
 
   return (
     <div className="editvaccine-page">

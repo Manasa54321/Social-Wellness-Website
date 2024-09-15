@@ -29,7 +29,6 @@ const Navbar = () => {
     }
   };
 
-  // Render loading indicator while fetching user role
   if (isLoading) {
     return <div>Loading...</div>;
   }

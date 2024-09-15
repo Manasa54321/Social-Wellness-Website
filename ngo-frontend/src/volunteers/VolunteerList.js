@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './VolunteerList.css'; // Import CSS file for styling
+import './VolunteerList.css'; 
 
 function VolunteerList() {
   const [volunteers, setVolunteers] = useState([]);
 
   useEffect(() => {
-    // Fetch data from the backend API
-    axios.get('http://localhost:8080/volunteerdetails') // Replace with your backend API endpoint
+    axios.get('http://localhost:8080/volunteerdetails') 
       .then(response => {
         setVolunteers(response.data);
         console.log(response.data);

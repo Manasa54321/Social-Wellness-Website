@@ -8,13 +8,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* filter: blur(2px); */
 }
 #volunteerdiv{
-    /* padding: auto; */
-    /* background-color: antiquewhite; */
     background-color:rgba(117, 212, 222, 0.8) ;
-    /* margin-top:300px; */
     height: 80vh;
     border: 5px solid rgb(201, 90, 168);
     width: 40vw;

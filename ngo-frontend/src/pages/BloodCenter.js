@@ -54,7 +54,7 @@ export default function Bloodcenter() {
                   <th scope="col">Timing</th>
                   <th scope="col">Available Blood Groups</th>
                   <th scope="col">Status</th>
-                  <th scope="col">Action</th>
+                  {userRole === 'admin' && (<th scope="col">Actions</th>)}
                 </tr>
               </thead>
               <tbody>

@@ -77,7 +77,6 @@ export default function Event() {
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       {authState.userId !== 0 ? (
                         authState.vId !== 0 ? (
-                          // If user is logged in and already a volunteer, show "Participate" button
                           <button
                             className="btn btn-danger"
                             onClick={() => participate(event.eid)}
@@ -85,13 +84,11 @@ export default function Event() {
                             Participate
                           </button>
                         ) : (
-                          // If user is logged in but not a volunteer, show link to register as a volunteer
                           <Link to="/addvol" className="btn btn-primary">
                             Register as Volunteer
                           </Link>
                         )
                       ) : (
-                        // If user is not logged in, show link to login or register
                         <Link to="/login" className="btn btn-secondary">
                           Login or Register
                         </Link>

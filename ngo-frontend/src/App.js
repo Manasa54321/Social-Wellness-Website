@@ -19,19 +19,19 @@ import VolunteerList from './volunteers/VolunteerList';
 import Event from './pages/Event';
 import AddEvent from './Events/AddEvent';
 import EditEvent from './Events/EditEvent';
-import BloodCenter from'./pages/BloodCenter';
+import BloodCenter from './pages/BloodCenter';
 import AddCenter from "./BloodCenter/AddCenter";
 import EditCenter from "./BloodCenter/EditCenter";
 import ViewCenter from "./BloodCenter/ViewCenter";
-function App() {
 
+function App() {
   return (
     <div className="App">
       <AuthProvider>
         <Router>
           <Navbar />
           <Routes>
-          <Route exact path="/" element={<Home />} />
+            <Route exact path="/" element={<Home />} />
             <Route exact path="/home" element={<Home />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/adduser" element={<AddUser />} />
@@ -50,12 +50,12 @@ function App() {
             <Route path="/editevent/:id" element={<EditEvent />} />
             <Route path="/bloodcenter" element={<BloodCenter />} />
             <Route exact path="/addcenter" element={<AddCenter />} />
-          <Route exact path="/editcenter/:id" element={<EditCenter />} />
-          <Route exact path="/viewcenter/:id" element={<ViewCenter />} />
+            <Route exact path="/editcenter/:id" element={<EditCenter />} />
+            <Route exact path="/viewcenter/:id" element={<ViewCenter />} />
           </Routes>
         </Router>
       </AuthProvider>
-      
+
     </div>
   );
 }

@@ -5,7 +5,7 @@ import '../pages/VaccineCamp.css';
 
 export default function AddVaccine() {
     let navigate = useNavigate();
-    const currdate = new Date().toISOString().split('T')[0]; // format date as yyyy-mm-dd
+    const currdate = new Date().toISOString().split('T')[0];
     const [camp, setCamp] = useState({
         vaccine: "",
         vdate: currdate,
