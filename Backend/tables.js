@@ -2,12 +2,10 @@ var mysql = require('mysql2');
 
 var con = mysql.createConnection({
     host: 'localhost',
-    user: 'chaitra',
+    user: 'user',
     password: '1234',
     database: 'ngo'
 });
-// Connect to the database
-
 
 con.connect((err) => {
     if (err) throw err;
@@ -226,4 +224,21 @@ con.connect((err) => {
         if (err) throw err;
         console.log("Volunteers table created");
     });
+
+    const createDonationTableQuery = `
+        CREATE TABLE IF NOT EXISTS Donate (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        amount DOUBLE NOT NULL,
+        description VARCHAR(255),
+        donationDate DATE NOT NULL,
+        user_id INT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
+        )
+    `;
+
+    con.query(createDonationTableQuery, (err, result) => {
+        if (err) throw err;
+        console.log("donation table created");
+    });
+
 });
