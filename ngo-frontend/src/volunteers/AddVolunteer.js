@@ -1,13 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../pages/AuthContext";
 import './volunteers.css';
 
 export const AddVolunteer = () => {
   let navigate = useNavigate();
   const { authState, setAuthState } = useContext(AuthContext);
-  const { id } = useParams();
 
   const [volunteers, setVolunteers] = useState([]);
   const [volunteer, setVolunteer] = useState({
@@ -22,7 +21,7 @@ export const AddVolunteer = () => {
   useEffect(() => {
     if (authState.userId === 0) {
       alert("Please login first!");
-      navigate("/login"); // Redirect to login page
+      navigate("/login"); 
     } else {
       loadVolunteers();
     }
@@ -32,6 +31,7 @@ export const AddVolunteer = () => {
   const loadVolunteers = async () => {
     const result = await axios.get("http://localhost:8080/volunteers");
     setVolunteers(result.data);
+    console.log(volunteers);
   };
 
   const onInputChange = (e) => {

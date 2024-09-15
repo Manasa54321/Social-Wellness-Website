@@ -35,16 +35,6 @@ export default function EditCamp() {
     }
   };
 
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await axios.put(`http://localhost:8080/bloodDonation/${id}`, user);
-    navigate("/");
-  };
-
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/bloodDonation/${id}`);
     setUser(result.data);
@@ -55,6 +45,17 @@ export default function EditCamp() {
       date: formattedDate, 
     });
   };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.put(`http://localhost:8080/bloodDonation/${id}`, user);
+    navigate("/");
+  };
+
 
   return (
     <div className="editdonation-page">
