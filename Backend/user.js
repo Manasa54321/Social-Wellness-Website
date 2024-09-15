@@ -11,7 +11,7 @@ app.use(cors()); // for handling CORS
 // Create a connection to the database
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'chaitra',
+  user: 'user',
   password: '1234',
   database: 'ngo'
 });

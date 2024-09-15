@@ -11,7 +11,7 @@ app.use(cors()); // for handling CORS
 // Create a connection to the database
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'chaitra',
+  user: 'user',
   password: '1234',
   database: 'ngo'
 });
@@ -41,17 +41,20 @@ app.get('/users', (req, res) => {
   });
 });
 
-app.get('/user/role/:id', (req, res) => {
-  const { id } = req.params;
-  connection.query('SELECT role FROM user WHERE user_id=id', (err, results) => {
-    if (err) {
-      console.error('Error fetching user role:', err);
-      res.status(500).json({ error: 'Error fetching user role' });
-      return;
-    }
-    res.json(results);
-  });
-});
+
+// app.get('/user/role/:id', (req, res) => {
+//   const { id } = req.params;
+//   connection.query('SELECT role FROM user WHERE user_id=?', [id], (err, results) => {
+//     if (err) {
+//       console.error('Error fetching user role:', err);
+//       res.status(500).json({ error: 'Error fetching user role' });
+//       return;
+//     }
+//     res.json(results);
+//   });
+// });
+
+
 
 
 
@@ -199,7 +202,7 @@ GROUP BY
 
 
 app.get('/user/role', (req, res) => {
-  const userId = req.query.userId;
+  const userId = req.query.user_id;
   const query = 'SELECT role FROM user WHERE user_id = ?';
   connection.query(query, [userId], (err, result) => {
       if (err) {
