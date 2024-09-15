@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import AuthContext from '../AuthContext';
+import AuthContext from './AuthContext';
 import './Bloodcenter.css';
 import bcimage from '../BloodCenter/bloodcenter.jpg';
 

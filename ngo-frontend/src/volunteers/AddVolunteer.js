@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import AuthContext from "../AuthContext";
+import AuthContext from "../pages/AuthContext";
 import './volunteers.css';
 
 export const AddVolunteer = () => {

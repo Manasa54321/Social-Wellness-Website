@@ -1,49 +1,83 @@
 import axios from "axios";
-import React, { useState ,useEffect} from "react";
+import React, { useState ,useEffect, useContext} from "react";
 import { Link, useNavigate ,useParams} from "react-router-dom";
+import AuthContext from "./AuthContext";
+import socialHelpImage from '../images/volunteer.avif';
 
 export default function Login() {
     let navigate=useNavigate();
+    const { setAuthState } = useContext(AuthContext);
     const [users, setUsers] = useState([]);
+    const [vols, setVols] = useState([]);
 
   const { id } = useParams();
 
   useEffect(() => {
     loadUsers();
+    loadVols();
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("http://localhost:9090/users");
-    console.log(result);
+    const result = await axios.get("http://localhost:8080/users");
+    // console.log("here users: ", result.data);
     setUsers(result.data);
+    console.log("here users 2: ", users);
   };
-    const [user, setUser]=useState({
-        username: "",
-        password:"",
-    });
+
+  const loadVols = async () => {
+    const result = await axios.get("http://localhost:8080/volunteers");
+    // console.log("here users: ", result.data);
+    setVols(result.data);
+    console.log("here vols 2: ", vols);
+  };
+
+  const [user, setUser]=useState({
+      username: "",
+      password:"",
+  });
 
     const{username, password}=user;
+
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
       };
-      const onSubmit = async (e) => {
-        e.preventDefault();
-        const existingUsernames = users.map((u) => u.username);
-        const isUsernameExists = existingUsernames.includes(user.username);
-        if (!isUsernameExists) {
-        alert("Username doesnot exist please register");
 
-        return;
+    
+    const onSubmit = async (e) => {
+      e.preventDefault();
+      await loadUsers();
+      await loadVols();
+  
+      const existingUser = users.find((u) => u.username === user.username);
+      if (!existingUser) {
+          alert("Username does not exist. Please register.");
+          return;
+      }
+      else {
+        if (existingUser.password !== user.password) {
+            alert("Incorrect password. Please try again.");
+            return;
         }
-        navigate("/home");
+        
+        const existingVol = vols.find((v) => v.user_id === existingUser.user_id);
+        
+        if (!existingVol) {
+          setAuthState({ userId: existingUser.user_id, vId: 0 });
+        } else {
+          setAuthState({ userId: existingUser.user_id, vId: existingVol.id });
+        }
 
-    }
+        console.log("login submit ", existingUser.user_id, existingVol ? existingVol.id : null);
+        navigate("/home");
+      }
+  }
+    
       
   return (
-    <div className="container">
+    <div className="container-fluid vh-80 d-flex justify-content-center align-items-center login-page" style={{ backgroundImage: `url(${socialHelpImage})`, backgroundSize: 'cover' }}>
     <div className="row">
-      <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-        <h2 className="text-center m-4">Register User</h2>
+      <div className="col-md offset-md border rounded p-4 mt-2 shadow login-form">
+        <h2 className="text-center m-4">Login</h2>
 
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="mb-3">
@@ -66,15 +100,14 @@ export default function Login() {
               Password
             </label>
             <input
-              type={"text"}
+              type={"password"}
               className="form-control"
-              placeholder="Enter your firstname"
+              placeholder="Enter your password"
               name="password"
               value={password}
               onChange={(e) => handleChange(e)}
             />
           </div>
-          
           
           
           
@@ -84,10 +117,13 @@ export default function Login() {
           <Link className="btn btn-outline-danger mx-2" to="/adduser">
             Register
           </Link>
+
         </form>
       </div>
+
+      
     </div>
-  </div>
+   </div>
   );
 }
 

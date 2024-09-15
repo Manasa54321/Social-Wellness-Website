@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import axios from "axios";
-import AuthContext from '../AuthContext';
+import AuthContext from './AuthContext';
 import './VaccineCamp.css';
 import vaccine1 from '../images/vaccine.png';
 
