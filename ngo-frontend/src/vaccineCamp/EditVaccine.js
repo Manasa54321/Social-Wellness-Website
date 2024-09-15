@@ -5,7 +5,7 @@ import '../pages/VaccineCamp.css';
 
 export default function EditVaccine() {
   let navigate = useNavigate();
-  const currdate = new Date().toISOString().split('T')[0];
+  const currdate = new Date().toISOString().slice(0, 10);
   const { id } = useParams();
 
   const [user, setUser] = useState({
@@ -49,8 +49,15 @@ export default function EditVaccine() {
 
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/vaccineCamp/${id}`);
-    setUser(result.data);
+    const userData = result.data;
+    const formattedDate = new Date(userData.vdate).toISOString().slice(0, 10);
+  
+    setUser({
+      ...userData,
+      vdate: formattedDate, 
+    });
   };
+  
 
   return (
     <div className="editvaccine-page">

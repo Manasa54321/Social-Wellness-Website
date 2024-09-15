@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import '../pages/BloodCamp.css';
 export default function EditCamp() {
   let navigate = useNavigate();
-  const currdate = new Date().toISOString().split('T')[0];
+  const currdate = new Date().toISOString().slice(0, 10);
   const { id } = useParams();
 
   const [user, setUser] = useState({
@@ -48,6 +48,12 @@ export default function EditCamp() {
   const loadUser = async () => {
     const result = await axios.get(`http://localhost:8080/bloodDonation/${id}`);
     setUser(result.data);
+    const formattedDate = new Date(user.date).toISOString().slice(0, 10);
+  
+    setUser({
+      ...user,
+      date: formattedDate, 
+    });
   };
 
   return (
