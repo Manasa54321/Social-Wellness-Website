@@ -809,6 +809,20 @@ app.get('/bloodDonation/:id', (req, res) => {
 });
 
 
+app.post('/donations', (req, res) => {
+  const { amount, description, donationDate, user_id } = req.body;
+  const query = 'INSERT INTO Donate (amount, description, donationDate, user_id) VALUES (?, ?, ?, ?)';
+
+  connection.query(query, [amount, description, donationDate, user_id], (err, result) => {
+    if (err) {
+      console.error('Error adding donation:', err);
+      res.status(500).send('Error adding donation');
+    } else {
+      res.send('Donation added successfully');
+    }
+  });
+});
+
   
 
   // app.post('/volunteer', (req, res) => {

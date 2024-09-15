@@ -13,7 +13,7 @@ export const AddDonation = () => {
     amount: '',
     description: '',
     donationDate: new Date().toISOString().slice(0, 10),  // Format for Date (YYYY-MM-DD)
-    user: { id: authState.userId }  // Referencing the current user's ID
+    user_id: authState.userId   // Referencing the current user's ID
   });
 
   const [errors, setErrors] = useState({});
@@ -50,7 +50,8 @@ export const AddDonation = () => {
       return;
     }
     try {
-      await axios.post('http://localhost:8080/api/donations', donation);
+      console.log("donation", donation);
+      await axios.post('http://localhost:8080/donations', donation);
       navigate('/');
     } catch (error) {
       console.error('Error adding donation', error);
