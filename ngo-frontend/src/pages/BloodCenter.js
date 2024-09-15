@@ -23,8 +23,13 @@ export default function Bloodcenter() {
   };
 
   const fetchUserRole = async (userId) => {
-    const res = await axios.get(`http://localhost:8080/user/role?user_id=${userId}`);
-    setUserRole(res.data);
+    if (userId === 0) {
+      setUserRole("user");
+    }
+    else {
+      const res = await axios.get(`http://localhost:8080/user/role?user_id=${userId}`);
+      setUserRole(res.data);
+    }
     console.log(userRole);
   };
 
